@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 短视频共创计划 · 0 学费学技术，学会了一起挣钱</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=JetBrains+Mono:wght@500;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js" integrity="sha384-pPi0zxBAoDu6+JXW/C68UZLvBUUtU+7zonhif43rqj7pxsGyqyqzcian2Rj37Rss" crossorigin="anonymous"></script>
+<style>
+/* ===== 基础 ===== */
+:root{
+  --bg:#0A0E16; --bg2:#0D1320; --panel:#111A2B; --panel2:#162236; --panel3:#1B2A42;
+  --line:#1E2C44; --line2:#2A3C5C;
+  --text:#E9EEF6; --text2:#9DAAC1; --text3:#67789A;
+  --cyan:#22D3EE; --green:#34D399; --red:#F87171; --amber:#FBBF24;
+  --mono:"JetBrains Mono","Noto Sans SC","PingFang SC",monospace;
+  --sans:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{color:var(--cyan);text-decoration:none;}
+img{max-width:100%;display:block;}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;}
+.grid-bg{background-image:linear-gradient(rgba(34,211,238,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,.045) 1px,transparent 1px);background-size:44px 44px;}
+
+/* ===== 导航 ===== */
+nav{position:sticky;top:0;z-index:50;background:rgba(10,14,22,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);}
+.nav-in{max-width:1180px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;letter-spacing:.5px;}
+.brand .dot{width:9px;height:9px;background:var(--green);border-radius:2px;box-shadow:0 0 10px rgba(52,211,153,.8);}
+.nav-links{display:flex;gap:22px;font-size:13.5px;color:var(--text2);}
+.nav-links a:hover{color:var(--cyan);}
+.nav-cta{padding:8px 18px;background:var(--green);color:#04231A;font-weight:700;border-radius:6px;font-size:13.5px;letter-spacing:.5px;}
+.nav-cta:hover{filter:brightness(1.1);color:#04231A;}
+
+/* ===== HERO ===== */
+.hero{position:relative;min-height:94vh;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--line);}
+.hero-bg{position:absolute;inset:0;background:url('https://aka.doubaocdn.com/s/SRhu9Delnx') center 30%/cover no-repeat;opacity:.4;}
+.hero-veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,14,22,.55) 0%,rgba(10,14,22,.86) 62%,var(--bg) 100%);}
+.hero-in{position:relative;z-index:2;padding:110px 24px 90px;max-width:1180px;margin:0 auto;width:100%;}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12.5px;letter-spacing:2px;color:var(--green);border:1px solid rgba(52,211,153,.4);background:rgba(52,211,153,.08);padding:6px 14px;border-radius:4px;margin-bottom:26px;}
+.hero-kicker .pulse{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.6s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+.hero h1{font-size:clamp(28px,4.8vw,54px);font-weight:900;line-height:1.25;letter-spacing:1px;max-width:900px;}
+.hero h1 .hl{color:var(--green);}
+.hero h1 .hl2{color:var(--cyan);}
+.hero-sub{margin-top:24px;font-size:clamp(15px,1.6vw,19px);color:var(--text2);max-width:720px;}
+.hero-sub b{color:var(--text);}
+.hero-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px;align-items:center;}
+.btn{padding:14px 30px;border-radius:8px;font-weight:700;font-size:16px;letter-spacing:.5px;display:inline-flex;align-items:center;gap:8px;}
+.btn-main{background:var(--green);color:#04231A;}
+.btn-main:hover{filter:brightness(1.1);color:#04231A;}
+.btn-ghost{border:1px solid var(--line2);color:var(--text);}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);}
+.hero-note{margin-top:18px;font-size:13px;color:var(--text3);}
+.free-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:50px;max-width:980px;}
+.free-cell{background:rgba(17,26,43,.78);border:1px solid var(--line);border-radius:10px;padding:16px 18px;position:relative;overflow:hidden;}
+.free-cell::before{content:"";position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--green),transparent);}
+.free-cell .f-label{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--text3);text-transform:uppercase;}
+.free-cell .f-num{font-family:var(--mono);font-size:clamp(22px,2.6vw,30px);font-weight:700;margin-top:4px;color:var(--green);}
+.free-cell .f-desc{font-size:12px;color:var(--text2);margin-top:2px;}
+.hero-require{margin-top:20px;font-size:14px;color:var(--text2);}
+.hero-require b{color:var(--amber);font-family:var(--mono);}
+
+/* ===== 章节通用 ===== */
+section{padding:84px 0;border-bottom:1px solid var(--line);}
+.sec-head{margin-bottom:44px;max-width:860px;}
+.sec-no{font-family:var(--mono);font-size:13px;letter-spacing:3px;color:var(--cyan);display:block;margin-bottom:12px;}
+.sec-no.red{color:var(--red);}
+.sec-no.green{color:var(--green);}
+.sec-field{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-left:10px;}
+.sec-head h2{font-size:clamp(24px,3.4vw,38px);font-weight:900;line-height:1.3;letter-spacing:.5px;margin-top:6px;}
+.sec-head p{color:var(--text2);margin-top:14px;font-size:15.5px;}
+
+/* ===== 01 先看坑 ===== */
+.pits{background:linear-gradient(180deg,#14090D 0%,var(--bg) 100%);}
+.pits .sec-no{color:var(--red);}
+.pit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-bottom:36px;}
+.pit{background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.26);border-radius:12px;padding:24px 22px;}
+.pit .p-no{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:#F3A8A8;}
+.pit .p-t{font-size:17px;font-weight:700;margin-top:10px;color:#FCA5A5;}
+.pit p{font-size:13.5px;color:#E5B8B8;margin-top:8px;line-height:1.8;}
+.pit-turn{margin-top:12px;font-size:13px;color:#F3A8A8;border-top:1px dashed rgba(248,113,113,.3);padding-top:10px;}
+.pit-turn b{color:var(--text);}
+.pits-closer{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px 28px;font-size:15.5px;line-height:1.9;color:var(--text2);}
+.pits-closer strong{color:var(--text);}
+
+/* ===== 02 我们的模式 ===== */
+.model-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:36px;}
+@media (max-width:900px){.model-cards{grid-template-columns:1fr;}}
+.model-col{border-radius:12px;overflow:hidden;border:1px solid var(--line);}
+.model-col.free{border-color:rgba(52,211,153,.4);}
+.model-col.you{border-color:rgba(251,191,36,.35);}
+.model-head{padding:18px 22px;}
+.model-head.free{background:rgba(52,211,153,.09);}
+.model-head.you{background:rgba(251,191,36,.07);}
+.model-head .t1{font-size:19px;font-weight:900;}
+.model-head.free .t1{color:#6EE7B7;}
+.model-head.you .t1{color:#FCD34D;}
+.model-head .t2{font-size:12.5px;color:var(--text2);margin-top:3px;}
+.model-list{padding:6px 22px 20px;}
+.model-li{display:flex;gap:12px;padding:13px 0;border-top:1px solid var(--line);font-size:14px;color:var(--text2);align-items:flex-start;}
+.model-li .mk{font-family:var(--mono);font-weight:700;color:var(--green);flex:none;}
+.model-li.you-li .mk{color:var(--amber);}
+.model-li .ml-t{font-weight:600;color:var(--text);}
+.model-li .ml-d{display:block;font-size:13px;color:var(--text2);margin-top:2px;}
+.share-box{background:linear-gradient(90deg,rgba(52,211,153,.13),rgba(34,211,238,.09));border:1px solid rgba(52,211,153,.38);border-radius:12px;padding:26px 30px;font-size:16px;line-height:2;}
+.share-box .big{font-size:18px;font-weight:800;color:var(--text);display:block;margin-bottom:6px;}
+.share-box strong{color:var(--green);}
+.skill-note{margin-top:20px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--cyan);border-radius:8px;padding:18px 22px;font-size:14.5px;color:var(--text2);line-height:2;}
+.skill-note b{color:var(--cyan);}
+
+/* ===== 数据支撑（风口+平台） ===== */
+.split{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;}
+@media (max-width:900px){.split{grid-template-columns:1fr;gap:36px;}}
+.story-h{font-size:19px;font-weight:700;margin:26px 0 12px;color:var(--text);}
+.story-h:first-child{margin-top:0;}
+.story p{color:var(--text2);font-size:15px;margin-bottom:12px;}
+.story .key{color:var(--cyan);font-weight:700;}
+.story blockquote{border-left:3px solid var(--cyan);padding:10px 18px;background:rgba(34,211,238,.06);border-radius:0 8px 8px 0;color:var(--text);font-size:15px;margin:16px 0;}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:44px;}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px;}
+.kpi .k-label{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--text3);}
+.kpi .k-num{font-family:var(--mono);font-size:clamp(22px,2.6vw,30px);font-weight:700;margin-top:8px;color:var(--green);}
+.kpi .k-num.small{font-size:clamp(16px,1.9vw,21px);}
+.kpi .k-desc{font-size:12.5px;color:var(--text2);margin-top:6px;}
+.chart-box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 18px 12px;}
+.chart-box .c-title{font-size:14px;font-weight:700;color:var(--text);padding:0 6px 4px;}
+.chart-box .c-sub{font-size:12px;color:var(--text3);padding:0 6px 10px;font-family:var(--mono);}
+.chart{width:100%;min-height:320px;}
+.plat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;}
+.plat-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:12px;position:relative;transition:border-color .2s;}
+.plat-card:hover{border-color:var(--cyan);}
+.plat-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.plat-name{font-size:18px;font-weight:900;letter-spacing:.5px;display:flex;align-items:center;gap:8px;}
+.plat-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:1px;padding:3px 9px;border-radius:20px;border:1px solid var(--line2);color:var(--text2);white-space:nowrap;}
+.plat-tag.hot{border-color:rgba(34,211,238,.5);color:var(--cyan);background:rgba(34,211,238,.07);}
+.plat-fact{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--green);}
+.plat-desc{font-size:13.5px;color:var(--text2);}
+.plat-src{font-size:11px;color:var(--text3);border-top:1px dashed var(--line);padding-top:10px;margin-top:auto;}
+
+/* ===== 真相（红区） ===== */
+.truth{background:linear-gradient(180deg,#14090D 0%,var(--bg) 100%);}
+.truth .sec-no{color:var(--red);}
+.big-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:44px;}
+.big-num{background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.28);border-radius:12px;padding:26px 22px;}
+.big-num .bn-label{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:#F3A8A8;}
+.big-num .bn-num{font-family:var(--mono);font-size:clamp(26px,3.4vw,40px);font-weight:700;color:#FCA5A5;margin-top:8px;}
+.big-num .bn-desc{font-size:13px;color:#E5B8B8;margin-top:6px;}
+.truth-charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:36px;}
+@media (max-width:900px){.truth-charts{grid-template-columns:1fr;}}
+.truth-cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;}
+.case{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px;}
+.case .c-tag{font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:1px;}
+.case p{font-size:14px;color:var(--text2);margin-top:8px;}
+.case .c-src{font-size:11px;color:var(--text3);margin-top:10px;}
+
+/* ===== 对比 ===== */
+.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:44px;}
+@media (max-width:900px){.cmp-grid{grid-template-columns:1fr;}}
+.cmp-col{border-radius:12px;overflow:hidden;border:1px solid var(--line);}
+.cmp-col.ai{border-color:rgba(248,113,113,.35);}
+.cmp-col.video{border-color:rgba(52,211,153,.4);}
+.cmp-head{padding:20px 22px;}
+.cmp-head.ai{background:rgba(248,113,113,.08);}
+.cmp-head.video{background:rgba(52,211,153,.09);}
+.cmp-head .t1{font-size:19px;font-weight:900;}
+.cmp-head.ai .t1{color:#FCA5A5;}
+.cmp-head.video .t1{color:#6EE7B7;}
+.cmp-head .t2{font-size:12.5px;color:var(--text2);margin-top:4px;}
+.cmp-row{display:flex;justify-content:space-between;gap:12px;padding:14px 22px;border-top:1px solid var(--line);font-size:13.5px;flex-wrap:wrap;}
+.cmp-row .k{color:var(--text3);font-family:var(--mono);font-size:12px;letter-spacing:.5px;white-space:nowrap;}
+.cmp-row .v{color:var(--text2);text-align:right;}
+.cmp-col.video .cmp-row .v{color:#A7F3D0;font-weight:500;}
+.cmp-col.ai .cmp-row .v{color:#E5B8B8;}
+.verdict{background:linear-gradient(90deg,rgba(52,211,153,.12),rgba(34,211,238,.08));border:1px solid rgba(52,211,153,.35);border-radius:12px;padding:26px 28px;font-size:16px;line-height:1.9;}
+.verdict strong{color:var(--green);}
+.verdict .big{font-size:19px;font-weight:700;color:var(--text);display:block;margin-bottom:8px;}
+
+/* ===== 收益阶梯 ===== */
+.steps{position:relative;margin-top:10px;}
+.steps::before{content:"";position:absolute;left:15px;top:10px;bottom:10px;width:2px;background:linear-gradient(180deg,var(--cyan),var(--green),var(--amber));opacity:.5;}
+@media (max-width:900px){.steps::before{left:11px;}}
+.step{position:relative;padding-left:70px;margin-bottom:34px;}
+@media (max-width:900px){.step{padding-left:46px;}}
+.step .st-dot{position:absolute;left:6px;top:6px;width:20px;height:20px;border-radius:50%;background:var(--bg);border:3px solid var(--cyan);}
+@media (max-width:900px){.step .st-dot{left:2px;width:18px;height:18px;}}
+.step:nth-child(2) .st-dot{border-color:var(--green);}
+.step:nth-child(3) .st-dot{border-color:var(--amber);}
+.step:nth-child(4) .st-dot{border-color:var(--green);}
+.step-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px 26px;}
+.step-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px;margin-bottom:8px;}
+.st-phase{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--cyan);}
+.st-phase.g{color:var(--green);} .st-phase.a{color:var(--amber);}
+.st-title{font-size:20px;font-weight:900;}
+.st-time{font-family:var(--mono);font-size:12px;color:var(--text3);}
+.st-goal{font-size:14px;color:var(--text2);margin:10px 0 14px;}
+.income-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:14px 0;}
+.income{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:14px 16px;}
+.income .i-label{font-family:var(--mono);font-size:10.5px;letter-spacing:1px;color:var(--text3);}
+.income .i-num{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--green);margin-top:4px;}
+.income .i-num.amber{color:var(--amber);}
+.income .i-desc{font-size:12px;color:var(--text2);margin-top:3px;}
+.st-total{font-size:14px;color:var(--text);background:rgba(52,211,153,.1);border:1px dashed rgba(52,211,153,.4);border-radius:8px;padding:12px 16px;display:inline-block;}
+.st-total .tt{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--green);}
+.disclaimer{font-size:12.5px;color:var(--text3);background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:8px;padding:16px 20px;margin-top:40px;line-height:1.8;}
+
+/* ===== 计划 ===== */
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;}
+@media (max-width:900px){.plan-grid{grid-template-columns:1fr;}}
+.sched{display:flex;flex-direction:column;gap:16px;}
+.sched-item{display:flex;gap:18px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:20px;}
+.sched-time{font-family:var(--mono);font-size:13px;color:var(--cyan);white-space:nowrap;padding-top:3px;}
+.sched-item .s-t{font-weight:700;font-size:15.5px;}
+.sched-item .s-d{font-size:13.5px;color:var(--text2);margin-top:5px;}
+.perks{display:grid;grid-template-columns:1fr;gap:12px;}
+.perk{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:flex;gap:14px;align-items:flex-start;}
+.perk .pk{width:34px;height:34px;flex:none;border-radius:8px;background:rgba(34,211,238,.1);display:flex;align-items:center;justify-content:center;}
+.perk .pk svg{width:18px;height:18px;stroke:var(--cyan);}
+.perk .p-t{font-weight:700;font-size:15px;}
+.perk .p-d{font-size:13px;color:var(--text2);margin-top:4px;}
+
+/* ===== CTA ===== */
+.cta-sec{background:linear-gradient(180deg,var(--bg),#0B1A1B 60%,var(--bg));text-align:center;padding:100px 0 90px;position:relative;overflow:hidden;}
+.cta-bg{position:absolute;inset:0;background:url('https://aka.doubaocdn.com/s/llsX5pYV4a') center 45%/cover no-repeat;opacity:.15;}
+.cta-sec .wrap{position:relative;z-index:2;}
+.cta-sec h2{font-size:clamp(24px,3.8vw,42px);font-weight:900;line-height:1.4;}
+.cta-sec .c-sub{color:var(--text2);max-width:680px;margin:18px auto 0;font-size:15.5px;}
+.steps-mini{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin:42px 0 34px;}
+.step-mini{background:rgba(17,26,43,.7);border:1px solid var(--line2);border-radius:12px;padding:20px 26px;min-width:200px;text-align:left;}
+.step-mini .sm-no{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--cyan);}
+.step-mini .sm-t{font-weight:800;font-size:16.5px;margin-top:8px;}
+.step-mini .sm-d{font-size:12.5px;color:var(--text2);margin-top:5px;}
+.step-mini:nth-child(2) .sm-no{color:var(--green);}
+.step-mini:nth-child(3) .sm-no{color:var(--amber);}
+.cta-btns{display:flex;gap:16px;justify-content:center;margin-top:8px;flex-wrap:wrap;}
+.cta-small{font-size:13px;color:var(--text3);margin-top:22px;}
+.cta-note{max-width:780px;margin:52px auto 0;text-align:left;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:12px;padding:24px 28px;font-size:13px;color:var(--text2);line-height:1.9;}
+.cta-note b{color:var(--text);}
+
+/* ===== 页脚 ===== */
+footer{border-top:1px solid var(--line);padding:44px 0 60px;background:var(--bg2);}
+.src-title{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--text3);margin-bottom:16px;}
+.src-list{columns:2;gap:32px;font-size:12px;color:var(--text3);line-height:2;}
+@media (max-width:700px){.src-list{columns:1;}}
+.src-list li{list-style:none;break-inside:avoid;}
+.src-list a{color:var(--text3);border-bottom:1px dotted var(--line2);}
+.src-list a:hover{color:var(--cyan);}
+.foot-note{margin-top:26px;font-size:12px;color:var(--text3);line-height:1.9;border-top:1px solid var(--line);padding-top:20px;}
+
+/* 窄屏 */
+@media (max-width:768px){
+  section{padding:60px 0;}
+  .nav-links{display:none;}
+  .hero-in{padding:80px 20px 64px;}
+  .hero{min-height:0;}
+  .chart{min-height:300px;}
+  .plat-grid{grid-template-columns:1fr;}
+  .big-nums{grid-template-columns:1fr 1fr;}
+  .cmp-row{flex-direction:column;gap:4px;}
+  .cmp-row .v{text-align:left;}
+  .steps-mini{flex-direction:column;align-items:stretch;}
+}
+@media (max-width:420px){
+  .big-nums{grid-template-columns:1fr;}
+  .kpi-row{grid-template-columns:1fr 1fr;}
+  .income-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 导航 ===== -->
+<nav>
+  <div class="nav-in">
+    <div class="brand"><span class="dot"></span>AI 短视频共创计划 · 澜溪传媒</div>
+    <div class="nav-links">
+      <a href="#pits">市面的坑</a>
+      <a href="#model">我们的做法</a>
+      <a href="#market">风口数据</a>
+      <a href="#income">收益路径</a>
+      <a href="#plan">30天计划</a>
+    </div>
+    <a class="nav-cta" href="#join">免费报名</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero grid-bg">
+  <div class="hero-bg"></div>
+  <div class="hero-veil"></div>
+  <div class="hero-in">
+    <div class="hero-kicker"><span class="pulse"></span>澜溪传媒 · 线下共创班 · 全程 0 学费</div>
+    <h1>学 AI 短视频，<span class="hl">学费 0 元</span>；<br>学会之后，<span class="hl2">咱们一起挣钱</span></h1>
+    <p class="hero-sub">不卖课、不收割、不套模板。我们把技术真教到你手里——<b>免费培训、免费场地、免费网络、免费陪跑</b>，你只带一台笔记本走进来；30 天后，带着自己的账号和自己的作品走出去，然后我们一起把它做大。</p>
+    <div class="hero-cta">
+      <a class="btn btn-main" href="#join">免费报名，带电脑来就行</a>
+      <a class="btn btn-ghost" href="#pits">先看看市面上的坑</a>
+    </div>
+    <p class="hero-note mono">页面所有行业数据均可溯源，见文末来源；收益均为行业公开参考区间，非保底承诺。</p>
+    <div class="free-strip">
+      <div class="free-cell"><div class="f-label">学费</div><div class="f-num">¥0</div><div class="f-desc">不卖课，不收培训费</div></div>
+      <div class="free-cell"><div class="f-label">场地费</div><div class="f-num">¥0</div><div class="f-desc">线下教室随到随练</div></div>
+      <div class="free-cell"><div class="f-label">网络费</div><div class="f-num">¥0</div><div class="f-desc">机房网络，出片不卡</div></div>
+      <div class="free-cell"><div class="f-label">陪跑费</div><div class="f-num">¥0</div><div class="f-desc">从起号到接单全程带</div></div>
+      <div class="free-cell"><div class="f-label">公共设施</div><div class="f-num">全免</div><div class="f-desc">外设 / 素材库 / 参考案例</div></div>
+    </div>
+    <p class="hero-require">你只需要：<b>一台笔记本</b> + <b>自己的算力</b> + 一颗认真学的心</p>
+  </div>
+</header>
+
+<!-- ===== 01 先看坑 ===== -->
+<section id="pits" class="pits">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no red">01 / FIELD · PITFALLS</span>
+      <h2>先算清楚：市面上的 AI 课，你的钱到底花在哪了？</h2>
+      <p>不是吓你，是把行业里真实发生的事摆给你看。很多人学 AI 短视频，学费交了、算力钱也花了，最后什么都没学会——钱不是花在了「学」上，是花在了下面这四个地方。</p>
+    </div>
+    <div class="pit-grid">
+      <div class="pit">
+        <div class="p-no mono">PIT 01</div>
+        <div class="p-t">先收学费的线下班</div>
+        <p>课还没上一节，几千上万的学费先交出去。交钱之前是「保底月入过万」，交钱之后是「你自己多努力」。钱退不退，看运气。</p>
+        <div class="pit-turn"><b>结果：</b>学费花了，方法没学会</div>
+      </div>
+      <div class="pit">
+        <div class="p-no mono">PIT 02</div>
+        <div class="p-t">卖完即走的线上课</div>
+        <p>录播课加一套模板素材，打包卖给你就算完事。你照着模板做，数据一动不动；想找人问，客服已读不回。</p>
+        <div class="pit-turn"><b>结果：</b>课买了，人失联了</div>
+      </div>
+      <div class="pit">
+        <div class="p-no mono">PIT 03</div>
+        <div class="p-t">套模板的「速成方法」</div>
+        <p>教的根本不是方法，是抄来的固定套路。换个题材就失灵，AI 工具一更新版本，学的东西当场过期。你学的是别人的答案，不是自己的能力。</p>
+        <div class="pit-turn"><b>结果：</b>方法全是套的，自己不会变通</div>
+      </div>
+      <div class="pit">
+        <div class="p-no mono">PIT 04</div>
+        <div class="p-t">出问题没人管的实操</div>
+        <p>视频生成报错、画面崩坏、抽卡翻车、工具不会调——这是学 AI 视频每天都会遇到的事。没人帮你解决，你就卡在一个环节，作品永远出不来，越学越灰心。</p>
+        <div class="pit-turn"><b>结果：</b>卡死了，放弃了，钱白花了</div>
+      </div>
+    </div>
+    <div class="pits-closer">
+      <strong>学费 + 算力钱，两头都花了，最后什么都没学会——问题不在你，在教的方法。</strong>
+      所以我们的做法，从第一天起就不一样：学费不收、录播不卖、模板不套、问题不留到第二天。你花出去的每一分钱，只花在一件事上——把手艺练到你自己身上。
+    </div>
+  </div>
+</section>
+
+<!-- ===== 02 我们的模式 ===== -->
+<section id="model" class="grid-bg">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no green">02 / FIELD · OUR MODEL</span>
+      <h2>我们的做法：不赚你的学费，赚「一起做大」的钱</h2>
+      <p>我们的收入不来自你的学费——它来自你把账号做起来之后的共同收益。所以你学得越好、做得越多、挣得越多，我们越高兴。这个账，怎么算都是双赢。</p>
+    </div>
+    <div class="model-cards">
+      <div class="model-col free">
+        <div class="model-head free">
+          <div class="t1">我们免费提供</div>
+          <div class="t2">你只管来学，剩下的交给我们</div>
+        </div>
+        <div class="model-list">
+          <div class="model-li"><span class="mk">01</span><div><span class="ml-t">免费技术培训</span><span class="ml-d">教底层逻辑和完整流程，不套模板、不卖录播；从提示词到成片，每一步讲透原理。</span></div></div>
+          <div class="model-li"><span class="mk">02</span><div><span class="ml-t">免费场地</span><span class="ml-d">线下教室全天开放，随到随练，和同学一起研究，氛围拉满。</span></div></div>
+          <div class="model-li"><span class="mk">03</span><div><span class="ml-t">免费网络</span><span class="ml-d">机房网络环境，出片上传不卡顿，不在关键时刻掉链子。</span></div></div>
+          <div class="model-li"><span class="mk">04</span><div><span class="ml-t">免费公共设施</span><span class="ml-d">电脑外设、素材库、参考案例、行业资料，随便用。</span></div></div>
+          <div class="model-li"><span class="mk">05</span><div><span class="ml-t">免费全程陪跑</span><span class="ml-d">从注册账号到第一条商单，导师随时在场。生成报错、画面崩坏、抽卡翻车——当场解决，不留到第二天。</span></div></div>
+        </div>
+      </div>
+      <div class="model-col you">
+        <div class="model-head you">
+          <div class="t1">你只需要</div>
+          <div class="t2">三样东西，一样都不能少</div>
+        </div>
+        <div class="model-list">
+          <div class="model-li you-li"><span class="mk">01</span><div><span class="ml-t">一台笔记本</span><span class="ml-d">能跑常用工具即可，配置要求开课会讲清楚。</span></div></div>
+          <div class="model-li you-li"><span class="mk">02</span><div><span class="ml-t">自己的算力</span><span class="ml-d">AI 生成需要算力支撑，这是你唯一的成本项，按自己的练习节奏购买。</span></div></div>
+          <div class="model-li you-li"><span class="mk">03</span><div><span class="ml-t">一颗认真学的心</span><span class="ml-d">按时上课、每天实操、持续产出。这是唯一我们替不了你的事。</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="share-box">
+      <span class="big">一起挣钱的逻辑，就一句话：</span>
+      你出技术和作品，我们出运营、流量、商务和 MCN 资源。账号做起来了，收益按约定比例分成——<strong>你赚得越多，我们分得越多</strong>，所以我们比你自己更想让你成功。这不是买卖关系，是合伙关系。
+    </div>
+    <div class="skill-note">
+      <b>手艺是练出来的。</b>AI 视频是门手艺活：看一百遍教程，不如亲手生成一百条片子。同样的工具，有人出片又快又稳，有人反复翻车——差距不在工具，在手感。练得越多，手感越熟，出片越快，账号权重越高，收益越好。这个逻辑，你实操到第三天就会自己感受到。
+    </div>
+  </div>
+</section>
+
+<!-- ===== 03 风口数据 ===== -->
+<section id="market">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">03 / FIELD · MARKET</span>
+      <h2>赛道是真的有钱：风口在这里，钱也在这里</h2>
+      <p>学之前先看清楚，为什么这个方向值得投入时间。以下数据均来自公开行业报告与平台官方发布。</p>
+    </div>
+    <div class="split">
+      <div class="story">
+        <h3 class="story-h">市场规模：一年一个台阶，还在加速</h3>
+        <p>据行业监测数据，<span class="key">2025 年国内 AI 短剧市场规模达 168 亿元</span>，2026 年预计突破 240 亿元；艾瑞咨询估算，<span class="key">2026 年中国 AI 视频生成市场规模有望突破 200 亿元</span>，2030 年有望达到 1000-2000 亿元量级。</p>
+        <blockquote>全球视角：2025 年全球 AIGC 视频市场规模约 428 亿美元，同比增长 61.3%。这是全行业的确定性方向，不是某个平台的短期活动。</blockquote>
+        <h3 class="story-h">内容供给：缺口是真实存在的</h3>
+        <p>抖音官方在 2025 创作者大会上公布：近半年平台上<span class="key">使用 AI 创作的稿件量增长 91%</span>；平台同步推出「创作阶梯计划」（百亿流量池）与「AI 创作浪潮计划」（工具 + 课程 + 行业资源 + 现金与流量扶持）。</p>
+        <p>用户对 AI 故事短片、治愈短片、萌宠内容的接受度持续提升——<span class="key">优质 AI 内容的供给速度，赶不上用户消费的速度</span>。缺口就是机会，而机会属于先学会的人。</p>
+      </div>
+      <div class="chart-box">
+        <div class="c-title">中国 AI 短剧 / 视频生成市场规模（亿元）</div>
+        <div class="c-sub">SOURCE: 行业监测 · 艾瑞咨询估算</div>
+        <div id="chart-market" class="chart"></div>
+      </div>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="k-label">抖音 2025 创作者大会</div>
+        <div class="k-num">100亿+</div>
+        <div class="k-desc">「创作阶梯计划」投入百亿流量，激励优质内容创作者</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">青年创作者成长计划</div>
+        <div class="k-num">冷启动扶持</div>
+        <div class="k-desc">入选后前 3 条原创稿件可获得流量激励，累计最高 10 万流量</div>
+      </div>
+      <div class="kpi">
+        <div class="k-label">AIGC 短剧招募计划（即梦 × 抖音）</div>
+        <div class="k-num small">最高 500 万元</div>
+        <div class="k-desc">重点 AI 作品单部最高可获 500 万投资，联运流量推广 3000 万-1 亿曝光</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 04 平台红利 ===== -->
+<section id="platforms" class="grid-bg">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">04 / FIELD · PLATFORMS</span>
+      <h2>六大平台全部下场，抢着给 AI 内容创作者发钱</h2>
+      <p>全行业缺的不是平台，是能稳定产出优质 AI 内容的创作者。以下每家平台的 AI 政策均为公开可查的真实信息。</p>
+    </div>
+    <div class="plat-grid">
+      <div class="plat-card">
+        <div class="plat-top">
+          <div class="plat-name">抖音 / 红果短剧</div>
+          <span class="plat-tag hot">AI 内容主阵地</span>
+        </div>
+        <div class="plat-fact">AI 创作稿件量半年 +91% · 红果日活 1.68 亿</div>
+        <div class="plat-desc">抖音设立 AIGC 内容专项扶持：「AI 创作浪潮计划」提供工具、课程、现金与流量扶持；红果短剧日活已超过「爱优腾芒」总和，是 AI 内容的超级流量池。</div>
+        <div class="plat-src mono">来源：新华网 · 上海证券报 · 九派新闻（2025-2026）</div>
+      </div>
+      <div class="plat-card">
+        <div class="plat-top">
+          <div class="plat-name">腾讯视频 / 火龙漫剧</div>
+          <span class="plat-tag">机构 + 个人双层工具</span>
+        </div>
+        <div class="plat-fact">WorkRally 已发布 · WorkSolo 内测 · 独家分成系数 2.4</div>
+        <div class="plat-desc">面向机构的 WorkRally 覆盖剧本解析、分镜生成、内容生产到资产管理全链路；面向个人的 WorkSolo 主打 AI 短剧、互动影游、自由画布。免费平台火龙漫剧已累计上线 7 万部作品。</div>
+        <div class="plat-src mono">来源：DoNews · AI TNT · 澎湃新闻（2026）</div>
+      </div>
+      <div class="plat-card">
+        <div class="plat-top">
+          <div class="plat-name">爱奇艺</div>
+          <span class="plat-tag hot">星河 AI 番剧计划</span>
+        </div>
+        <div class="plat-fact">独家分账最高 100% · 原创内容 1.2 倍分账</div>
+        <div class="plat-desc">三种合作模式：投资共建（平台承担 10%-30% 预算）、版权采购 / 保底、高比例独家分账（最高 100%）。计划 2.0 将门槛降到单集 3 分钟、总时长 120 分钟，并免费开放平台文学 IP 库。</div>
+        <div class="plat-src mono">来源：腾讯新闻 · 新浪财经 · 企查查（2026）</div>
+      </div>
+      <div class="plat-card">
+        <div class="plat-top">
+          <div class="plat-name">芒果 TV</div>
+          <span class="plat-tag">自建 AIGC 中心</span>
+        </div>
+        <div class="plat-fact">AIGC 合伙人计划 · S+ 级保底上不封顶</div>
+        <div class="plat-desc">2026 年 2 月成立独立的 AIGC 创新内容中心，发布「AIGC 合伙人试行计划」；AI 长剧《后西游记》已在湖南卫视黄金档 + 芒果 TV 双平台播出。</div>
+        <div class="plat-src mono">来源：澎湃新闻 · 新浪财经（2026）</div>
+      </div>
+      <div class="plat-card">
+        <div class="plat-top">
+          <div class="plat-name">优酷</div>
+          <span class="plat-tag">AIGC 专项激励</span>
+        </div>
+        <div class="plat-fact">独家合作最高激励 135 万元</div>
+        <div class="plat-desc">2026 年 6 月起推出 AIGC 网络故事片激励计划：独家合作最高激励 135 万元、非独家 90 万元——国内长视频平台首次为 AI 影视内容设立专项高额激励。</div>
+        <div class="plat-src mono">来源：网易 · 腾讯新闻（2026）</div>
+      </div>
+      <div class="plat-card">
+        <div class="plat-top">
+          <div class="plat-name">快手</div>
+          <span class="plat-tag hot">四项 AIGC 专属政策</span>
+        </div>
+        <div class="plat-fact">8 亿资金分账革新 · 单剧最高百万投资</div>
+        <div class="plat-desc">2026 快手光合大会发布四项专属政策：AIGC 燎原计划（新人冷启动）、磁力新剧计划（孵化 2000+ 部精品）、IP 漫改掘金计划、全民 AI 制作人计划，配套 10 亿微短剧扶持资源。</div>
+        <div class="plat-src mono">来源：和讯网 · 综艺报（2026）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 05 行业真相 ===== -->
+<section id="truth" class="truth">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no red">05 / FIELD · REALITY CHECK</span>
+      <h2>同时也要泼一盆冷水：AI 漫剧，普通人别碰</h2>
+      <p>「一人一电脑，AI 漫剧月入十万」的论调，和真实行业数据完全是两回事。我们把 2026 年的公开数据摆出来——学对方向，比盲目努力重要一百倍。</p>
+    </div>
+    <div class="big-nums">
+      <div class="big-num">
+        <div class="bn-label">2026 上半年抖音端新增 AI 剧 / 漫剧</div>
+        <div class="bn-num">22.19万部</div>
+        <div class="bn-desc">平均每 72 秒就有一部新 AI 漫剧上线——产能早已过剩</div>
+      </div>
+      <div class="big-num">
+        <div class="bn-label">播放量破亿的作品</div>
+        <div class="bn-num">1055部</div>
+        <div class="bn-desc">破亿率仅 0.47%，1000 部里不到 5 部</div>
+      </div>
+      <div class="big-num">
+        <div class="bn-label">AI 漫剧爆款率</div>
+        <div class="bn-num">&lt;0.1%</div>
+        <div class="bn-desc">1000 部里不到 1 部能真正跑出来（36氪）</div>
+      </div>
+      <div class="big-num">
+        <div class="bn-label">收回成本的比例</div>
+        <div class="bn-num">1.3%</div>
+        <div class="bn-desc">只有 2886 部跨过 5000 万播放盈亏线，98.7% 没回本</div>
+      </div>
+    </div>
+    <div class="truth-charts">
+      <div class="chart-box">
+        <div class="c-title">AI 漫剧的残酷漏斗：22.19 万部里能赚到钱的极少</div>
+        <div class="c-sub">SOURCE: 36氪 · 北青热点（2026 上半年抖音端数据）</div>
+        <div id="chart-funnel" class="chart"></div>
+      </div>
+      <div class="chart-box">
+        <div class="c-title">万播收益：从「百元时代」跌到「个位数时代」</div>
+        <div class="c-sub">SOURCE: 新浪财经 · 澎湃新闻（单位：元 / 万次有效播放）</div>
+        <div id="chart-cpm" class="chart"></div>
+      </div>
+    </div>
+    <div class="truth-cases">
+      <div class="case">
+        <div class="c-tag mono">案例 01 · 分账暴跌</div>
+        <p>AI 漫剧万播收益从百元级别跌至 5-10 元，缩水超九成；曾有 1.8 亿播放量的作品最终只结算了 18 万元。</p>
+        <div class="c-src mono">来源：新浪财经（2026.08）</div>
+      </div>
+      <div class="case">
+        <div class="c-tag mono">案例 02 · 平台补贴退潮</div>
+        <p>2026 年 5 月红果官宣全面取消 AI 短剧专项保底；8 月再次下调：S+ 级保底从 5 万降到 1 万，A+ / A 级直接取消保底、转纯分账。</p>
+        <div class="c-src mono">来源：网易 · 三易生活（2026）</div>
+      </div>
+      <div class="case">
+        <div class="c-tag mono">案例 03 · 从业者真实账本</div>
+        <p>有从业者 11 部 AI 漫剧一共赚了 9.6 元；算力成本一路走高，2026 年 8 月「大批 AI 博主停更」冲上热搜。</p>
+        <div class="c-src mono">来源：一线从业者公开反馈（2026.08）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 06 赛道对比 ===== -->
+<section id="compare">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">06 / FIELD · COMPARISON</span>
+      <h2>我们带你做的方向：同样的播放量，收入是漫剧的 3 倍起</h2>
+      <p>AI 漫剧看起来门槛低，实际是「低进场门槛、高赚钱门槛」。15-60 秒的 AI 垂类短视频，才是普通人能打赢的仗。</p>
+    </div>
+    <div class="cmp-grid">
+      <div class="cmp-col ai">
+        <div class="cmp-head ai">
+          <div class="t1">AI 漫剧</div>
+          <div class="t2">低进场门槛 · 高赚钱门槛</div>
+        </div>
+        <div class="cmp-row"><span class="k">入行门槛</span><span class="v">要团队 / 剧本 IP / 高额算力，试错成本极高</span></div>
+        <div class="cmp-row"><span class="k">制作周期</span><span class="v">单集 1-7 天，系列剧按月算</span></div>
+        <div class="cmp-row"><span class="k">成本投入</span><span class="v">算力 + 剧本 + IP，一条剧几千到几万</span></div>
+        <div class="cmp-row"><span class="k">爆款概率</span><span class="v">全行业不足 0.1%，千分之几概率</span></div>
+        <div class="cmp-row"><span class="k">变现速度</span><span class="v">全集上线 + 审核 + 分账结算，周期几个月</span></div>
+        <div class="cmp-row"><span class="k">万播收益</span><span class="v">5-10 元，且平台补贴在退潮</span></div>
+        <div class="cmp-row"><span class="k">风险</span><span class="v">侵权 / 审核 / 算力 / 流量，多重叠加</span></div>
+      </div>
+      <div class="cmp-col video">
+        <div class="cmp-head video">
+          <div class="t1">AI 垂类短视频（本计划方向）</div>
+          <div class="t2">轻资产 · 快落地 · 稳收益</div>
+        </div>
+        <div class="cmp-row"><span class="k">入行门槛</span><span class="v">单人可做，一台电脑即可启动</span></div>
+        <div class="cmp-row"><span class="k">制作周期</span><span class="v">单条 15-60 秒，熟练后每天 1-3 条</span></div>
+        <div class="cmp-row"><span class="k">成本投入</span><span class="v">几乎只有时间成本，工具月费几十到几百</span></div>
+        <div class="cmp-row"><span class="k">爆款概率</span><span class="v">垂类模板可复制，行业参考 10%-20%</span></div>
+        <div class="cmp-row"><span class="k">变现速度</span><span class="v">发布就有播放收益，千粉就能接商单</span></div>
+        <div class="cmp-row"><span class="k">万播收益</span><span class="v">垂类 10-30 元，精选内容可达 25-70 元</span></div>
+        <div class="cmp-row"><span class="k">风险</span><span class="v">合规原创，风险可控，账号越做越值钱</span></div>
+      </div>
+    </div>
+    <div class="chart-box" style="margin-bottom:36px;">
+      <div class="c-title">万播有效播放收益对比（元）—— 同一份播放量，收入差 3-7 倍</div>
+      <div class="c-sub">SOURCE: 抖音伙伴计划行业实测区间（2025-2026）· AI 漫剧数据来自新浪财经 / 澎湃</div>
+      <div id="chart-income" class="chart" style="min-height:300px;"></div>
+    </div>
+    <div class="verdict">
+      <span class="big">结论一句话：漫剧拼的是「博爆款」，短视频拼的是「持续产出」。前者 99% 的人赔钱，后者勤快的人稳定拿钱。</span>
+      <strong>播放分成打底 + 商单稳定叠加 + 多账号可复制</strong>——这是普通人能长期干、越干越值钱的内容生意，也是我们带你做的那一种。
+    </div>
+  </div>
+</section>
+
+<!-- ===== 07 收益阶梯 ===== -->
+<section id="income" class="grid-bg">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">07 / FIELD · INCOME PATH</span>
+      <h2>收益不是一步到位，是一步一步练出来的</h2>
+      <p>以下均为行业垂类 AI 账号的真实参考区间。核心逻辑只有一条：多练习、多产出、账号权重持续积累，收益稳步递增。</p>
+    </div>
+    <div class="steps">
+      <!-- 阶段1 -->
+      <div class="step">
+        <span class="st-dot"></span>
+        <div class="step-card">
+          <div class="step-head">
+            <span class="st-phase">PHASE 01</span>
+            <span class="st-title">0-1000 粉 · 孵化期</span>
+            <span class="st-time mono">第 1-4 周</span>
+          </div>
+          <div class="st-goal">掌握全流程制作能力，跑通发布闭环，打准账号标签，跑出你的第一条爆款模板。每日 1 条成品，累计产出 25+ 条作品。</div>
+          <div class="income-row">
+            <div class="income"><div class="i-label">播放量分成</div><div class="i-num">每月数百元</div><div class="i-desc">基础打底收益</div></div>
+            <div class="income"><div class="i-label">置换 + 小额商单</div><div class="i-num">百元级</div><div class="i-desc">少量产品置换合作</div></div>
+          </div>
+          <div class="st-total">这个阶段 <span class="tt">不赚钱是正常的</span>，练手艺、攒作品、测选题，把基础打牢</div>
+        </div>
+      </div>
+      <!-- 阶段2 -->
+      <div class="step">
+        <span class="st-dot"></span>
+        <div class="step-card">
+          <div class="step-head">
+            <span class="st-phase g">PHASE 02</span>
+            <span class="st-title">1000-1 万粉 · 成长期</span>
+            <span class="st-time mono">1-3 个月</span>
+          </div>
+          <div class="st-goal">稳定日更，复制爆款模板，开通全量变现权限（千粉即可开通星图接商单）。</div>
+          <div class="income-row">
+            <div class="income"><div class="i-label">播放量收益</div><div class="i-num">800-1500 元/月</div><div class="i-desc">月播放 300-500 万</div></div>
+            <div class="income"><div class="i-label">广告商单</div><div class="i-num">4500-10000 元/月</div><div class="i-desc">每月 3-5 条，单条 1500-2000 元</div></div>
+          </div>
+          <div class="st-total">综合月收入 <span class="tt">5000-12000 元</span> · 已超过大部分线下副业收入</div>
+        </div>
+      </div>
+      <!-- 阶段3 -->
+      <div class="step">
+        <span class="st-dot"></span>
+        <div class="step-card">
+          <div class="step-head">
+            <span class="st-phase a">PHASE 03</span>
+            <span class="st-title">1 万-10 万粉 · 成熟期</span>
+            <span class="st-time mono">3-6 个月</span>
+          </div>
+          <div class="st-goal">垂类 IP 成型，商单规模化，多渠道变现叠加（内容授权、多平台分发、短剧挂载分账）。</div>
+          <div class="income-row">
+            <div class="income"><div class="i-label">播放量收益</div><div class="i-num">3000-8000 元/月</div><div class="i-desc">月播放千万级</div></div>
+            <div class="income"><div class="i-label">广告商单</div><div class="i-num amber">1.8 万-8 万元/月</div><div class="i-desc">每月 6-10 条，单条 3000-8000 元</div></div>
+          </div>
+          <div class="st-total">综合月收入 <span class="tt">2.5 万-10 万元</span></div>
+        </div>
+      </div>
+      <!-- 阶段4 -->
+      <div class="step">
+        <span class="st-dot"></span>
+        <div class="step-card">
+          <div class="step-head">
+            <span class="st-phase g">PHASE 04</span>
+            <span class="st-title">10 万粉以上 · 放大期</span>
+            <span class="st-time mono">6 个月以上</span>
+          </div>
+          <div class="st-goal">垂类头部账号，商单溢价更高；可矩阵复制账号、带队做工作室、参与平台内容采购项目。</div>
+          <div class="income-row">
+            <div class="income"><div class="i-label">综合月收入</div><div class="i-num">10 万-30 万+</div><div class="i-desc">视账号规模与矩阵数量而定</div></div>
+          </div>
+          <div class="st-total">账号本身成为<span class="tt">持续增值的资产</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="disclaimer">
+      <b>重要说明：</b>以上为行业垂类 AI 账号真实参考区间，不是保底承诺。收益最终取决于你的学习投入、作品产出量、内容质量与爆款率。<strong style="color:var(--amber);">多练、多做、持续迭代，是拿到高收益的唯一路径——这正是本计划每天带你做的事情。</strong>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 08 30天计划 ===== -->
+<section id="plan">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-no">08 / FIELD · 30-DAY PLAN</span>
+      <h2>30 天，把手艺练到自己身上</h2>
+      <p>上午学方法、下午出作品、全程有人管。你在这 30 天里流过的每一滴汗，都会变成账号权重和收益曲线上的每一格。</p>
+    </div>
+    <div class="plan-grid">
+      <div>
+        <div class="sched">
+          <div class="sched-item">
+            <div class="sched-time mono">上午<br>方法课</div>
+            <div>
+              <div class="s-t">每天 2 节课 × 45 分钟，讲透原理</div>
+              <div class="s-d">行业逻辑、制作方法、运营技巧、变现路径。教的是能举一反三的底层方法，不是换题材就失效的固定模板。</div>
+            </div>
+          </div>
+          <div class="sched-item">
+            <div class="sched-time mono">下午<br>实操课</div>
+            <div>
+              <div class="s-t">当天学、当天练、当天出成品</div>
+              <div class="s-d">每天下午全程实操，当日产出成品视频。生成报错、画面崩坏、抽卡翻车——导师就在现场，当场解决，不让你卡在任何一个环节。</div>
+            </div>
+          </div>
+          <div class="sched-item">
+            <div class="sched-time mono">全程<br>陪跑</div>
+            <div>
+              <div class="s-t">从账号注册到第一条商单</div>
+              <div class="s-d">全流程带跑，不让你一个人摸黑走；作品达标考核后签约 MCN，流量、运营、商务全部接管，你专心创作。</div>
+            </div>
+          </div>
+          <div class="sched-item">
+            <div class="sched-time mono">对你的<br>要求</div>
+            <div>
+              <div class="s-t">只听课不做，永远学不会</div>
+              <div class="s-d">按时上课、每天完成实操、跟着节奏多测多练——作品堆得越多，爆款概率越高，手艺越扎实。平台不会奖励「想」，只会奖励「做」。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="perks">
+          <div class="perk">
+            <div class="pk"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
+            <div><div class="p-t">冷启动流量扶持</div><div class="p-d">机构统一申请平台新账号流量包，起号速度是个人单打独斗的 2-3 倍，大幅降低试错成本。</div></div>
+          </div>
+          <div class="perk">
+            <div class="pk"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div><div class="p-t">专业运营陪跑</div><div class="p-d">专属运营导师每周数据复盘，优化内容、标题、封面、投放；限流 / 违规走机构专属通道申诉。</div></div>
+          </div>
+          <div class="perk">
+            <div class="pk"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div>
+            <div><div class="p-t">多平台变现通道</div><div class="p-d">不止抖音：对接快手、小红书、长视频平台的内容采购与分账合作，一份内容多份收益。</div></div>
+          </div>
+          <div class="perk">
+            <div class="pk"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+            <div><div class="p-t">透明结算保障</div><div class="p-d">播放分成、商单费用、内容采购全部透明对账，固定结算周期，按时打款、不压款、按约定比例分成。</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 09 CTA ===== -->
+<section id="join" class="cta-sec">
+  <div class="cta-bg"></div>
+  <div class="wrap">
+    <h2>0 学费、0 场地费、0 网络费、0 陪跑费——<br>你只差一台笔记本</h2>
+    <p class="c-sub">30 天后，你会带着自己的账号、自己的作品、一门能长期挣钱的手艺走出教室。然后，咱们一起把它做大——你出作品，我们出资源，收益一起分。</p>
+    <div class="steps-mini">
+      <div class="step-mini">
+        <div class="sm-no mono">STEP 01</div>
+        <div class="sm-t">免费报名</div>
+        <div class="sm-d">留个名字，带电脑来教室</div>
+      </div>
+      <div class="step-mini">
+        <div class="sm-no mono">STEP 02</div>
+        <div class="sm-t">30 天练手艺</div>
+        <div class="sm-d">上午学方法，下午出作品，天天有产出</div>
+      </div>
+      <div class="step-mini">
+        <div class="sm-no mono">STEP 03</div>
+        <div class="sm-t">一起做账号</div>
+        <div class="sm-d">签约 MCN，流量运营商务全包，收益一起分</div>
+      </div>
+    </div>
+    <div class="cta-btns">
+      <a class="btn btn-main" href="#plan">免费报名，30 天把手艺学到手</a>
+      <a class="btn btn-ghost" href="#market">再看一遍赛道数据</a>
+    </div>
+    <p class="cta-small mono">机会留给的不是心动的人，是今天就走进来的人。</p>
+    <div class="cta-note">
+      <b>关于费用的诚实说明：</b>本计划学费、场地、网络、陪跑与公共设施全部免费，这是我们的公开承诺；你需要自备的只有笔记本和练习用的算力。页面所有收益区间均为 2025-2026 年行业垂类 AI 账号的真实参考数据（来源见下），不是保底承诺，也不存在「躺着赚钱」。签约 MCN 后收益按约定比例分成——<b>前提是：你必须按时上课、每天实操、持续产出</b>。我们负责把方法教对、把问题解决、把资源给足；剩下的，靠你的手。
+    </div>
+  </div>
+</section>
+
+<!-- ===== 页脚 / 来源 ===== -->
+<footer>
+  <div class="wrap">
+    <div class="src-title">DATA SOURCES · 本页数据来源（公开可查）</div>
+    <ul class="src-list">
+      <li>AI 短剧市场规模（2025 168 亿 → 2026E 240 亿）：<a href="https://m.sohu.com/a/1006779359_122714795">搜狐 · 2025-2026 AIGC 视频创作行业观察</a></li>
+      <li>中国 AI 视频生成市场 100-150 亿 / 200 亿 / 1000-2000 亿：<a href="https://news.qq.com/rain/a/20260211A05M3800">腾讯新闻引艾瑞咨询估算</a></li>
+      <li>全球 AIGC 视频市场 428 亿美元 / +61.3%：<a href="https://www.gooduo.net/news/31">谷多网络行业数据</a></li>
+      <li>抖音 AI 创作稿件量 +91%、创作阶梯计划、AI 创作浪潮计划：<a href="http://www1.xinhuanet.com/tech/20250924/187cfb6418bd4e8c94111c273cc2bbaf/c.html">新华网 · 抖音 2025 创作者大会</a></li>
+      <li>青年创作者成长计划冷启动流量激励：<a href="https://finance.sina.cn/stock/jdts/2025-10-04/detail-infsswiq4371118.d.html">新浪财经</a></li>
+      <li>AIGC 短剧招募计划最高 500 万投资：<a href="http://www.cnstock.com/commonDetail/378046">上海证券报</a></li>
+      <li>红果短剧日活 1.68 亿超爱优腾芒总和：<a href="http://m.toutiao.com/group/7683444947608961545/">九派新闻</a></li>
+      <li>腾讯 WorkRally / WorkSolo / 火龙漫剧：<a href="https://www.donews.com/news/detail/1/6609679.html">DoNews</a> · <a href="https://m.aitntnews.com/newDetail.html?newId=27760">AI TNT</a> · <a href="https://m.thepaper.cn/newsDetail_forward_33474147">澎湃新闻</a></li>
+      <li>爱奇艺星河 AI 番剧计划（分账最高 100%、2.0 门槛 3 分钟 / 120 分钟）：<a href="https://m.qcc.com/postnews/aaad02ba16f23589f7bfe01d9c4cf675.html">企查查</a> · <a href="http://news.qq.com/rain/a/20260604A065U000">腾讯新闻</a> · <a href="https://finance.sina.com.cn/jjxw/2026-08-21/doc-ininzyex1600777.shtml.md">新浪财经</a></li>
+      <li>芒果 TV AIGC 创新内容中心 / 合伙人计划 / AI 长剧上星：<a href="https://m.thepaper.cn/newsDetail_forward_33985330">澎湃新闻</a> · <a href="https://cj.sina.cn/articles/view/3840084769/e4e30b2101902yh1e">新浪财经</a></li>
+      <li>优酷 AIGC 网络故事片激励计划（独家最高 135 万）：<a href="https://www.163.com/dy/article/L2G0MPJ70517CABB.html">网易</a></li>
+      <li>快手四项 AIGC 政策、8 亿资金分账革新：<a href="http://m.toutiao.com/group/7681209198935409203/">和讯网</a> · <a href="http://m.toutiao.com/group/7674866392264475163/">综艺报</a></li>
+      <li>AI 漫剧 22.19 万部 / 破亿 1055 部 / 爆款率不足 0.1% / 98.7% 未回本：<a href="https://36kr.com/p/3932999806696839">36氪</a> · <a href="http://m.toutiao.com/group/7681449680475013683/">北青热点</a> · <a href="https://post.m.smzdm.com/p/az8x2zx5/">什么值得买引 36氪</a></li>
+      <li>万播收益从百元级跌至 5-10 元、1.8 亿播放仅结算 18 万：<a href="https://cj.sina.com.cn/articles/view/7879776328/1d5abd848068025rhk">新浪财经</a> · <a href="https://m.thepaper.cn/newsDetail_forward_33398047">澎湃新闻</a></li>
+      <li>红果取消 / 下调 AI 剧保底（S+ 1 万、A 级转纯分账）：<a href="https://m.3elife.net/Art/internet/202608/27/109591.html">三易生活</a> · <a href="https://www.163.com/dy/article/L284VKIR0517CABB.html">网易</a></li>
+      <li>创作者伙伴计划万播收益区间（5-100 元，垂类 8-18 元，精选 25-70 元）：<a href="https://www.iesdouyin.com/share/video/7666713219487320443">抖音创作者实测公开内容</a> · <a href="https://www.iesdouyin.com/share/video/7560977263757331739">抖音官方创作者内容</a></li>
+    </ul>
+    <div class="foot-note">
+      本页面为 AI 短视频共创计划 · 学员合作手册网页版。页面中「行业参考区间」「从业者反馈」等表述均为公开来源数据的客观转述，不代表对任何个人收益的承诺；免费范围（学费 / 场地 / 网络 / 陪跑 / 公共设施）为本计划公开承诺，签约与收益条款以双方正式协议为准。
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ===== ECharts 工具 ===== */
+function mountChart(id){
+  const el = document.getElementById(id);
+  const chart = echarts.init(el);
+  new ResizeObserver(() => chart.resize()).observe(el);
+  return chart;
+}
+const AXIS_COLOR = '#67789A';
+const GRID_LINE = 'rgba(42,60,92,.55)';
+const FONT = '"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif';
+const MONO = '"JetBrains Mono","Noto Sans SC",monospace';
+
+/* 03 市场规模 */
+(function(){
+  const c = mountChart('chart-market');
+  c.setOption({
+    grid:{left:64,right:30,top:40,bottom:46},
+    tooltip:{trigger:'axis',confine:true,backgroundColor:'#111A2B',borderColor:'#2A3C5C',textStyle:{color:'#E9EEF6',fontSize:13}},
+    xAxis:{type:'category',data:['2025 年','2026 年（预测）'],axisLine:{lineStyle:{color:'#2A3C5C'}},axisLabel:{color:AXIS_COLOR,fontFamily:FONT,fontSize:12.5,interval:0},axisTick:{show:false}},
+    yAxis:{type:'value',name:'亿元',nameTextStyle:{color:AXIS_COLOR,fontFamily:FONT},axisLabel:{color:AXIS_COLOR,fontFamily:MONO,fontSize:12},splitLine:{lineStyle:{color:GRID_LINE}},axisLine:{show:false}},
+    series:[{
+      type:'bar',
+      data:[
+        {value:168,itemStyle:{color:'#22D3EE',borderRadius:[6,6,0,0]}},
+        {value:240,itemStyle:{color:'rgba(34,211,238,.28)',borderColor:'#22D3EE',borderWidth:2,borderType:'dashed',borderRadius:[6,6,0,0]}}
+      ],
+      barWidth:74,
+      label:{show:true,position:'top',fontFamily:MONO,fontSize:15,fontWeight:700,color:'#E9EEF6',formatter:function(p){return p.value + ' 亿';}}
+    }],
+    graphic:[{type:'text',left:'center',top:6,style:{text:'AI 短剧市场规模：2025 年 168 亿元 → 2026 年预计突破 240 亿元',fill:'#9DAAC1',fontSize:12.5,fontFamily:FONT}}]
+  });
+})();
+
+/* 05 AI漫剧漏斗 */
+(function(){
+  const c = mountChart('chart-funnel');
+  c.setOption({
+    tooltip:{trigger:'item',confine:true,backgroundColor:'#111A2B',borderColor:'#2A3C5C',textStyle:{color:'#E9EEF6',fontSize:13}},
+    color:['#F87171','#FCA5A5','#FBBF24'],
+    series:[{
+      type:'funnel',
+      top:16,left:'6%',width:'88%',height:'84%',minSize:'28%',
+      sort:'descending',gap:4,
+      label:{show:true,position:'inside',fontFamily:FONT,fontSize:13,fontWeight:700,color:'#1A0B0B',formatter:function(p){return p.name;}},
+      data:[
+        {name:'2026 上半年新增 22.19 万部',value:221900},
+        {name:'过 5000 万播放盈亏线 2886 部（1.3%）',value:2886},
+        {name:'播放破亿仅 1055 部（0.47%）',value:1055}
+      ]
+    }]
+  });
+})();
+
+/* 05 万播收益走势 */
+(function(){
+  const c = mountChart('chart-cpm');
+  c.setOption({
+    grid:{left:52,right:56,top:40,bottom:40},
+    tooltip:{trigger:'axis',confine:true,backgroundColor:'#111A2B',borderColor:'#2A3C5C',textStyle:{color:'#E9EEF6',fontSize:13},valueFormatter:function(v){return v + ' 元/万播';}},
+    xAxis:{type:'category',boundaryGap:false,data:['2025 年\n（百元时代）','2026 年 5 月','2026 年 8 月\n（当下）'],axisLine:{lineStyle:{color:'#2A3C5C'}},axisLabel:{color:AXIS_COLOR,fontFamily:FONT,fontSize:12,interval:0,lineHeight:16},axisTick:{show:false}},
+    yAxis:{type:'value',name:'元/万播',nameTextStyle:{color:AXIS_COLOR,fontFamily:FONT},axisLabel:{color:AXIS_COLOR,fontFamily:MONO,fontSize:12},splitLine:{lineStyle:{color:GRID_LINE}},axisLine:{show:false}},
+    series:[{
+      type:'line',
+      data:[100,40,7.5],
+      symbolSize:10,
+      lineStyle:{color:'#F87171',width:3},
+      itemStyle:{color:'#F87171'},
+      areaStyle:{color:'rgba(248,113,113,.14)'},
+      label:{show:true,position:'top',fontFamily:MONO,fontSize:13,fontWeight:700,color:'#FCA5A5',formatter:function(p){const v=p.value;return v===100?'约 100 元':(v===40?'30-50 元':'5-10 元');}}
+    }],
+    graphic:[{type:'text',left:'center',top:6,style:{text:'AI 漫剧万播有效播放收益：缩水超九成',fill:'#F3A8A8',fontSize:12.5,fontFamily:FONT}}]
+  });
+})();
+
+/* 06 收益对比 */
+(function(){
+  const c = mountChart('chart-income');
+  c.setOption({
+    grid:{left:120,right:64,top:34,bottom:30},
+    tooltip:{trigger:'item',confine:true,backgroundColor:'#111A2B',borderColor:'#2A3C5C',textStyle:{color:'#E9EEF6',fontSize:13}},
+    xAxis:{type:'value',name:'元 / 万次有效播放',nameTextStyle:{color:AXIS_COLOR,fontFamily:FONT},axisLabel:{color:AXIS_COLOR,fontFamily:MONO,fontSize:12},splitLine:{lineStyle:{color:GRID_LINE}},axisLine:{show:false}},
+    yAxis:{type:'category',inverse:true,data:['AI 漫剧','AI 垂类短视频','精选垂类内容'],axisLine:{show:false,lineStyle:{color:'#2A3C5C'}},axisLabel:{color:'#E9EEF6',fontFamily:FONT,fontSize:13.5,fontWeight:500},axisTick:{show:false}},
+    series:[{
+      type:'bar',
+      data:[
+        {value:7.5,itemStyle:{color:'#F87171',borderRadius:[0,6,6,0]}},
+        {value:20,itemStyle:{color:'#34D399',borderRadius:[0,6,6,0]}},
+        {value:47.5,itemStyle:{color:'#22D3EE',borderRadius:[0,6,6,0]}}
+      ],
+      barWidth:30,
+      label:{show:true,position:'right',fontFamily:MONO,fontSize:14,fontWeight:700,color:'#E9EEF6',formatter:function(p){return ['5-10 元','10-30 元','25-70 元'][p.dataIndex];}}
+    }],
+    graphic:[{type:'text',left:'center',top:4,style:{text:'同一份播放量，收入差 3-7 倍',fill:'#9DAAC1',fontSize:12.5,fontFamily:FONT}}]
+  });
+})();
+</script>
+</body>
+</html>
